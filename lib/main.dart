@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/Responses/mobile_screen_layout.dart';
 import 'package:instagram_flutter/Responses/responsive_screen_layout.dart';
 import 'package:instagram_flutter/Responses/web_screen_Layout.dart';
 import 'package:instagram_flutter/config/colors.dart';
+import 'package:instagram_flutter/screens/login_screen.dart';
+import 'package:instagram_flutter/screens/signup_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -27,12 +28,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: Scaffold(
-        body: ResponsiveLayout(
-          webScreenLayout: WebScreenLayout(),
-          mobileScreenLayout: MobileScreenLayout(),
-        ),
-      ),
+      // home: Scaffold(
+      //   body: ResponsiveLayout(
+      //     webScreenLayout: WebScreenLayout(),
+      //     mobileScreenLayout: MobileScreenLayout(),
+      //   ),
+      // ),
+      home: SignupScreen(),
     );
   }
 }
