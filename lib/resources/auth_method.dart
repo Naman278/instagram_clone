@@ -2,12 +2,21 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instagram_flutter/models/user.dart';
+import 'package:instagram_flutter/models/userModel.dart';
 import 'package:instagram_flutter/resources/stroage_method.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<UserModel> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+
+    return UserModel.fromSnap(snap);
+  }
 
   //signing up user
   Future<String> signUpUser({
@@ -20,10 +29,11 @@ class AuthMethods {
     String res = "Some error occured";
     try {
       if (email.isNotEmpty ||
-          password.isNotEmpty ||
-          userName.isNotEmpty ||
-          bio.isNotEmpty ||
-          file != null) {
+              password.isNotEmpty ||
+              userName.isNotEmpty ||
+              bio.isNotEmpty
+          // || file != null
+          ) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
