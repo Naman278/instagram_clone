@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_flutter/Responses/mobile_screen_layout.dart';
 import 'package:instagram_flutter/Responses/responsive_screen_layout.dart';
 import 'package:instagram_flutter/Responses/web_screen_Layout.dart';
 import 'package:instagram_flutter/config/colors.dart';
+import 'package:instagram_flutter/config/global_variables.dart';
 import 'package:instagram_flutter/config/utils.dart';
 import 'package:instagram_flutter/resources/auth_method.dart';
 import 'package:instagram_flutter/screens/signup_screen.dart';
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       email: _emailController.text,
       password: _passController.text,
     );
-    if (res == 'success') {
+    if (res == 'success' && FirebaseAuth.instance.currentUser!.emailVerified) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(
@@ -46,7 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } else {
-      showSnackbar(res, context);
+      if (res == 'success') {
+        showSnackbar('Verify Email', context);
+      } else {
+        showSnackbar(res, context);
+      }
     }
     setState(() {
       _isLoading = false;
@@ -66,7 +72,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 32),
+          padding: MediaQuery.of(context).size.width > webScreenSize
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+              : const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
