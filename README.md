@@ -1,16 +1,21 @@
-# instagram_flutter
+# Instagram Clone
 
-A new Flutter project.
+Making an instagram clone using Flutter on Frontend and Firebase on backend.
 
-## Getting Started
+## Implemented Features
 
-This project is a starting point for a Flutter application.
+So far the following Features have been implemened
 
-A few resources to get you started if this is your first Flutter project:
+- Email/Password authentication with email verification
+- Uploaing Posts, Likes, comments
+- Searching a user
+- Display of Post Feed using Stream Builder
+- Displaying Profile Screen of a user along with all Posts made by that user
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Some backend basic
+ 
+ - Used Provider for easier State Management
+ - All the info about Users(email, username, User Id, Display Name, bio, Followers and Following list) is stored in Firestore Database
+ - All the Images(Pictures and Posts) are stored in Firebase Storage
+ - There URLs are stored along with user information and respective IDs in Firestore Database
+ 
