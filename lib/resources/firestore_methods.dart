@@ -61,6 +61,15 @@ class FirestoreMethods {
     }
   }
 
+  //Delete post
+  Future<void> deletePost(String postId) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   //upload comment
   Future<String> postComment(
     String text,
@@ -121,6 +130,39 @@ class FirestoreMethods {
             'likes': FieldValue.arrayUnion([uid]),
           });
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  //follow - unfollow
+  Future<void> followUser(
+    String currUid,
+    String profUid,
+    DocumentSnapshot<Map<String, dynamic>> snap,
+  ) async {
+    var userData = snap.data()!;
+    var followers = userData['followers'];
+    try {
+      if (!followers.contains(currUid)) {
+        await _firestore.collection('users').doc(profUid).update({
+          'followers': FieldValue.arrayUnion([currUid])
+        });
+        await _firestore.collection('users').doc(currUid).update({
+          'following': FieldValue.arrayUnion([profUid]),
+        });
+      } else {
+        await _firestore.collection('users').doc(profUid).update({
+          'followers': FieldValue.arrayRemove([currUid]),
+        });
+        await _firestore.collection('users').doc(currUid).update({
+          'following': FieldValue.arrayRemove([profUid]),
+        });
+      }
+      print('Hello');
+      print(currUid);
+      print(profUid);
+      print(followers);
     } catch (e) {
       print(e.toString());
     }

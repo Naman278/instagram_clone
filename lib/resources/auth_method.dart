@@ -23,6 +23,7 @@ class AuthMethods {
     required String email,
     required String password,
     required String userName,
+    required String name,
     required String bio,
     required Uint8List file,
   }) async {
@@ -50,6 +51,7 @@ class AuthMethods {
           uid: cred.user!.uid,
           photoUrl: photoUrl,
           username: userName,
+          name: name,
           bio: bio,
           followers: [],
           following: [],
@@ -102,5 +104,9 @@ class AuthMethods {
     }
 
     return res;
+  }
+
+  Future<void> signOut(context) async {
+    await _auth.signOut();
   }
 }
