@@ -72,7 +72,7 @@ flutter run
 
 You can download the latest version of the app here:
 
-- [Download App](build/app/outputs/flutter-apk/app-release.apk)
+- [Download App](build/app/outputs/flutter-apk/)
 
 ## Usage
 
