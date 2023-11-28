@@ -35,9 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
     String res = await AuthMethods().loginUser(
-      email: _emailController.text,
-      password: _passController.text,
-    );
+        email: _emailController.text,
+        password: _passController.text,
+        context: context);
     if (res == 'success' && FirebaseAuth.instance.currentUser!.emailVerified) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

@@ -67,6 +67,7 @@ class _LikeAnimationState extends State<LikeAnimation>
     // TODO: implement dispose
     super.dispose();
     controller.dispose();
+    // AnimationController(vsync: this).dispose();
   }
 
   @override

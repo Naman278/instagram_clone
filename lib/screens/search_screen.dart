@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram_flutter/config/colors.dart';
 import 'package:instagram_flutter/config/utils.dart';
 import 'package:instagram_flutter/screens/profile_screen.dart';
+import 'package:instagram_flutter/screens/showsinglePost.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -91,6 +92,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         child: ListTile(
                           leading: CircleAvatar(
+                            backgroundColor: secondaryColor,
                             backgroundImage: NetworkImage(
                               (snapshot.data! as dynamic).docs[index]
                                   ['photoUrl'],
@@ -121,8 +123,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 return StaggeredGridView.countBuilder(
                   crossAxisCount: 3,
                   itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => Image.network(
-                    (snapshot.data! as dynamic).docs[index]['postUrl'],
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SinglePost(
+                          snap: (snapshot.data! as dynamic).docs[index].data(),
+                        ),
+                      ),
+                    ),
+                    child: Image.network(
+                      (snapshot.data! as dynamic).docs[index]['postUrl'],
+                    ),
                   ),
                   staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
                   crossAxisSpacing: 2,

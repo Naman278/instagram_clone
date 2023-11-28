@@ -27,48 +27,58 @@ class _CommentCardState extends State<CommentCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(widget.snap['profileImage']),
+          GestureDetector(
+            child: CircleAvatar(
+              backgroundColor: secondaryColor,
+              backgroundImage: NetworkImage(widget.snap['profileImage']),
+            ),
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 16,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: widget.snap['username'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                // onLongPress: widget.snap['uid'] == user.uid
+                //     ? () {
+                //         showSnackbar('helo', context);
+                //       }
+                //     : () {},
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: widget.snap['username'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: ' ${widget.snap['description']}',
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 4,
-                    ),
-                    child: Text(
-                      DateFormat.yMMMd()
-                          .format(widget.snap['datePublished'].toDate()),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: secondaryColor,
+                          TextSpan(
+                            text: ' ${widget.snap['description']}',
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 4,
+                      ),
+                      child: Text(
+                        DateFormat.yMMMd()
+                            .format(widget.snap['datePublished'].toDate()),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: secondaryColor,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -96,6 +106,7 @@ class _CommentCardState extends State<CommentCard> {
                       user.uid,
                       widget.snap['likes'],
                       widget.snap['postId'],
+                      context,
                     );
                   },
                   child: widget.snap['likes'].contains(user.uid)
