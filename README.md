@@ -14,9 +14,7 @@ A Flutter-based social media app that replicates key features of popular social 
   - [Feed](#feed)
 - [Responsive Design](#responsive-design)
 - [Deleting User Account](#deleting-user-account)
-- [Folder Structure](#folder-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -64,8 +62,8 @@ Make sure you have the following installed:
 Clone the repository and install dependencies.
 
 ```bash
-git clone https://github.com/your_username/flutter-social-clone.git
-cd flutter-social-clone
+git clone https://github.com/Naman278/instagram_clone.git
+cd instagram_clone
 flutter pub get
 flutter run
 ```
