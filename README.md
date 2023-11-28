@@ -68,7 +68,7 @@ cd instagram_clone
 flutter pub get
 flutter run
 ```
-### Download the App
+### Download App
 
 You can download the latest version of the app here:
 
