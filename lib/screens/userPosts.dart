@@ -1,49 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_flutter/config/colors.dart';
 import 'package:instagram_flutter/config/global_variables.dart';
-import 'package:instagram_flutter/screens/chat_screen.dart';
 import 'package:instagram_flutter/widgets/post_card.dart';
 
-class FeedScreen extends StatelessWidget {
-  const FeedScreen({super.key});
+class UserPosts extends StatefulWidget {
+  final uid;
+  const UserPosts({super.key, required this.uid});
 
+  @override
+  State<UserPosts> createState() => _UserPostsState();
+}
+
+class _UserPostsState extends State<UserPosts> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor:
-          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
-      appBar: width > webScreenSize
-          ? null
-          : AppBar(
-              backgroundColor: mobileBackgroundColor,
-              centerTitle: false,
-              title: SvgPicture.asset(
-                'assets/ic_instagram.svg',
-                color: primaryColor,
-                height: 32,
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const ChatScreen()),
-                  ),
-                  icon: Icon(
-                    Icons.chat_bubble_outline_rounded,
-                  ),
-                )
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        title: const Text('Posts'),
+        centerTitle: false,
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
-            .orderBy('datePublished', descending: true)
+            .where('uid', isEqualTo: widget.uid)
+            // .orderBy('datePublished', descending: true)
             .snapshots(),
-        builder: ((context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+        builder: ((context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),

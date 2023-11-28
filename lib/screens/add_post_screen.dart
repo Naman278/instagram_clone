@@ -59,11 +59,25 @@ class _AddPostScreenState extends State<AddPostScreen> {
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: const Text('Create a Post'),
+          title: const Text(
+            'Select Image',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
           children: [
+            Divider(
+              color: mobileBackgroundColor,
+            ),
             SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: Text('Take a photo'),
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                'Take a photo',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17),
+              ),
               onPressed: () async {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
@@ -75,8 +89,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
               },
             ),
             SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
-              child: Text('Choose from gallery'),
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                'Choose from gallery',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17),
+              ),
               onPressed: () async {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
@@ -88,10 +106,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
               },
             ),
             SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: const Text(
                 'Cancel',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: Colors.red, fontSize: 17),
+                textAlign: TextAlign.center,
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
@@ -121,40 +140,65 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     final UserModel user = Provider.of<UserProvider>(context).getUser;
 
-    return _file == null
-        ? Center(
-            child: IconButton(
-              onPressed: () => _selectImage(context),
-              icon: const Icon(Icons.upload),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: mobileBackgroundColor,
+        leading: IconButton(
+          onPressed: () {
+            clearImage();
+          },
+          icon: const Icon(Icons.refresh),
+        ),
+        title: const Text('Create a Post'),
+        centerTitle: false,
+        actions: [
+          TextButton(
+            onPressed: () => postImage(user.uid, user.username, user.photoUrl),
+            child: const Text(
+              'Post',
+              style: TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
           )
-        : Scaffold(
-            appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
-              leading: IconButton(
-                onPressed: () {
-                  clearImage();
-                },
-                icon: Icon(Icons.arrow_back),
-              ),
-              title: const Text('Post to'),
-              centerTitle: false,
-              actions: [
-                TextButton(
-                  onPressed: () =>
-                      postImage(user.uid, user.username, user.photoUrl),
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+        ],
+      ),
+      body: _file == null
+          ? Center(
+              child: ElevatedButton(
+                onPressed: () => _selectImage(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: customGrey,
+                  fixedSize: const Size(200, 50),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.upload,
+                      size: 20,
                     ),
-                  ),
-                )
-              ],
-            ),
-            body: Column(
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Upload Image',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // IconButton(
+                //   onPressed: () => _selectImage(context),
+                //   icon: const Icon(Icons.upload),
+              ),
+            )
+          : Column(
               children: [
                 _isLoading
                     ? const LinearProgressIndicator()
@@ -167,6 +211,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
+                      backgroundColor: secondaryColor,
                       backgroundImage: NetworkImage(user.photoUrl),
                     ),
                     SizedBox(
@@ -201,6 +246,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 )
               ],
             ),
-          );
+    );
   }
 }

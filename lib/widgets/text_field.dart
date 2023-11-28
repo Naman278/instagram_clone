@@ -41,8 +41,9 @@ class _TextFieldInputState extends State<TextFieldInput> {
                       _showPass = !_showPass;
                     });
                   },
-                  child:
-                      Icon(_showPass ? Icons.visibility : Icons.visibility_off),
+                  child: Icon(_showPass
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined),
                 )
               : null),
       keyboardType: widget.textInputType,

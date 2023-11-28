@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/add_post_screen.dart';
@@ -20,8 +19,7 @@ List<Widget> homeScreenItems = [
   ),
   Consumer<UserProvider>(
     builder: (context, userProvider, _) {
-      final uid =
-          userProvider.getUser.uid ?? FirebaseAuth.instance.currentUser!.uid;
+      final uid = userProvider.getUser.uid;
       return ProfileScreen(uid: uid);
     },
   )

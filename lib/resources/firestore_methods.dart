@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
+import 'package:instagram_flutter/config/utils.dart';
 import 'package:instagram_flutter/models/comment.dart';
 import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/resources/stroage_method.dart';
@@ -20,10 +22,10 @@ class FirestoreMethods {
     String res = "Some error occured";
 
     try {
-      String postUrl =
-          await StorageMethods().uploadImagetoStroage('posts', file, true);
-
       String postId = const Uuid().v1();
+      String postUrl = await StorageMethods()
+          .uploadImagetoStroage('posts', file, true, postId);
+
       Post post = Post(
           description: description,
           uid: uid,
@@ -45,7 +47,8 @@ class FirestoreMethods {
   }
 
   //Like Post
-  Future<void> likePost(String postId, String uid, List likes) async {
+  Future<void> likePost(
+      String postId, String uid, List likes, BuildContext context) async {
     try {
       if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
@@ -57,27 +60,22 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      showSnackbar(e.toString(), context);
     }
   }
 
   //Delete post
-  Future<void> deletePost(String postId) async {
+  Future<void> deletePost(String postId, BuildContext context) async {
     try {
       await _firestore.collection('posts').doc(postId).delete();
     } catch (e) {
-      print(e.toString());
+      showSnackbar(e.toString(), context);
     }
   }
 
   //upload comment
-  Future<String> postComment(
-    String text,
-    String uid,
-    String username,
-    String profileImage,
-    String postId,
-  ) async {
+  Future<String> postComment(String text, String uid, String username,
+      String profileImage, String postId, BuildContext context) async {
     String res = "Some error occured";
 
     try {
@@ -101,19 +99,34 @@ class FirestoreMethods {
             .collection('comments')
             .doc(commentId)
             .set(comment.toJson());
+        res = "success";
       } else {
-        print('Empty text');
+        showSnackbar('Empty text', context);
       }
-      res = "success";
     } catch (err) {
       res = err.toString();
     }
     return res;
   }
 
+  //Delete commennt
+  Future<void> deleteComment(
+      String postId, String commenId, BuildContext context) async {
+    try {
+      await _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commenId)
+          .delete();
+    } catch (e) {
+      showSnackbar(e.toString(), context);
+    }
+  }
+
   //Like Comment
-  Future<void> likeComments(
-      String commentId, String uid, List likes, String postId) async {
+  Future<void> likeComments(String commentId, String uid, List likes,
+      String postId, BuildContext context) async {
     try {
       if (likes.contains(uid)) {
         await _firestore
@@ -131,7 +144,7 @@ class FirestoreMethods {
           });
       }
     } catch (e) {
-      print(e.toString());
+      showSnackbar(e.toString(), context);
     }
   }
 
@@ -139,6 +152,7 @@ class FirestoreMethods {
   Future<void> followUser(
     String currUid,
     String profUid,
+    BuildContext context,
     DocumentSnapshot<Map<String, dynamic>> snap,
   ) async {
     var userData = snap.data()!;
@@ -159,12 +173,48 @@ class FirestoreMethods {
           'following': FieldValue.arrayRemove([profUid]),
         });
       }
-      print('Hello');
-      print(currUid);
-      print(profUid);
-      print(followers);
     } catch (e) {
-      print(e.toString());
+      showSnackbar(e.toString(), context);
+    }
+  }
+
+  //update User details
+  Future<void> updateUser(
+    String userName,
+    String name,
+    String bio,
+    Uint8List? file,
+    context,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      String uid = data['uid'];
+      if (file != null) {
+        String photoUrl = await StorageMethods()
+            .uploadImagetoStroage('profilePics', file, false, null);
+        await _firestore.collection('users').doc(uid).update({
+          'photoUrl': photoUrl,
+        });
+      }
+      if (data['username'] != userName) {
+        await _firestore.collection('users').doc(uid).update({
+          'username': userName,
+        });
+      }
+
+      if (data['name'] != name) {
+        await _firestore.collection('users').doc(uid).update({
+          'name': name,
+        });
+      }
+
+      if (data['bio'] != bio) {
+        await _firestore.collection('users').doc(uid).update({
+          'bio': bio,
+        });
+      }
+    } catch (e) {
+      showSnackbar('e.string', context);
     }
   }
 }

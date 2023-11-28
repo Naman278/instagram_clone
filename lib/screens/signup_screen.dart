@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart ' show ByteData, rootBundle;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_flutter/config/colors.dart';
@@ -27,6 +28,25 @@ class _LoginScreenState extends State<SignupScreen> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadImage();
+  }
+
+  Future<void> loadImage() async {
+    setState(() {
+      isLoading = true;
+    });
+    ByteData data = await rootBundle.load('assets/default_user.png');
+    List<int> bytes = data.buffer.asUint8List();
+    setState(() {
+      _image = Uint8List.fromList(bytes);
+      isLoading = false;
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
@@ -48,13 +68,13 @@ class _LoginScreenState extends State<SignupScreen> {
       isLoading = true;
     });
     String res = await AuthMethods().signUpUser(
-      email: _emailController.text,
-      password: _passController.text,
-      userName: _usernameController.text,
-      name: _nameController.text,
-      bio: _bioController.text,
-      file: _image!,
-    );
+        email: _emailController.text,
+        password: _passController.text,
+        userName: _usernameController.text,
+        name: _nameController.text,
+        bio: _bioController.text,
+        file: _image!,
+        context: context);
     setState(() {
       isLoading = false;
     });
@@ -102,19 +122,15 @@ class _LoginScreenState extends State<SignupScreen> {
                   //circular widget to show Profile Pic
                   Stack(
                     children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 64,
-                              backgroundImage: MemoryImage(_image!),
-                            )
-                          : CircleAvatar(
-                              radius: 64,
-                              backgroundImage: NetworkImage(
-                                  'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'),
-                            ),
+                      CircleAvatar(
+                        radius: 75,
+                        backgroundColor: secondaryColor,
+                        backgroundImage: AssetImage('assets/default_user.png'),
+                        // MemoryImage(_image!),
+                      ),
                       Positioned(
-                        bottom: -10,
-                        left: 80,
+                        bottom: -15,
+                        left: 100,
                         child: IconButton(
                           onPressed: () {
                             selectImage();

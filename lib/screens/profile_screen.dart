@@ -5,7 +5,9 @@ import 'package:instagram_flutter/config/colors.dart';
 import 'package:instagram_flutter/config/utils.dart';
 import 'package:instagram_flutter/resources/auth_method.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
-import 'package:instagram_flutter/screens/login_screen.dart';
+import 'package:instagram_flutter/screens/confirm_delete_user.dart';
+import 'package:instagram_flutter/screens/edit_profile_screen.dart';
+import 'package:instagram_flutter/screens/userPosts.dart';
 import 'package:instagram_flutter/widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -31,11 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     getData();
     checkUser();
-    debug();
-  }
-
-  debug() {
-    print(widget.uid);
   }
 
   checkUser() async {
@@ -77,6 +74,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  _delete(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text(
+            'Delete Account!!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, color: Colors.red),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          children: [
+            Divider(
+              color: mobileBackgroundColor,
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                'Cancel',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+            ),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(10),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red, fontSize: 17),
+                textAlign: TextAlign.center,
+              ),
+              onPressed: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const DeleteUser()));
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -91,16 +135,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               actions: [
                 if (isOwner)
                   IconButton(
+                    tooltip: 'Logout',
                     onPressed: () async {
                       await AuthMethods().signOut(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
                     },
                     icon: const Icon(
                       Icons.logout_rounded,
+                      color: Colors.red,
+                    ),
+                  ),
+                if (isOwner)
+                  IconButton(
+                    onPressed: () => _delete(context),
+                    tooltip: 'Delete Account',
+                    icon: Icon(
+                      Icons.delete_outline_rounded,
                       color: Colors.red,
                     ),
                   ),
@@ -167,8 +216,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderColor: customGrey,
                                 text: 'Edit Profile',
                                 isOwner: isOwner,
-                                onPressed: (() {}),
-                              )
+                                onPressed: () async {
+                                  bool result =
+                                      await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const EditProfile(),
+                                    ),
+                                  );
+                                  if (result) {
+                                    getData();
+                                  }
+                                })
                             : FollowButton(
                                 backgroundColor:
                                     isFollowing ? customGrey : blueColor,
@@ -180,6 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   await FirestoreMethods().followUser(
                                     currUid,
                                     widget.uid,
+                                    context,
                                     await FirebaseFirestore.instance
                                         .collection('users')
                                         .doc(widget.uid)
@@ -195,9 +254,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           FollowButton(
                             backgroundColor: customGrey,
                             borderColor: customGrey,
-                            text: isOwner ? 'Edit Profile' : 'Message',
+                            text: 'Message',
                             isOwner: isOwner,
-                            onPressed: () {},
+                            onPressed: (() {}),
                           ),
                       ],
                     )
@@ -228,12 +287,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       itemBuilder: (context, index) {
                         DocumentSnapshot snap =
                             (snapshot.data! as dynamic).docs[index];
-                        return Container(
-                          child: Image(
-                            image: NetworkImage(
-                              snap['postUrl'],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => UserPosts(
+                                  uid: widget.uid,
+                                ),
+                              ),
+                            );
+                            getData();
+                          },
+                          child: Container(
+                            child: Image(
+                              image: NetworkImage(
+                                snap['postUrl'],
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
                         );
                       },
