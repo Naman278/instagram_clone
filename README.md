@@ -8,7 +8,6 @@ A Flutter-based social media app that replicates key features of popular social 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Download App](#download-app)
 - [Usage](#usage)
   - [Authentication](#authentication)
   - [Profile Management](#profile-management)
@@ -68,11 +67,6 @@ cd instagram_clone
 flutter pub get
 flutter run
 ```
-### Download App
-
-You can download the latest version of the app here:
-
-- [Download App](build/app/outputs/flutter-apk/)
 
 ## Usage
 
