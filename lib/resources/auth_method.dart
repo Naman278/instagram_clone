@@ -100,7 +100,7 @@ class AuthMethods {
       if (err.code == 'INVALID_LOGIN_CREDENTIALS') {
         res = 'Invalid login Credentials';
       } else {
-        showSnackbar('err.code', context);
+        showSnackbar(err.code, context);
       }
     } catch (err) {
       res = err.toString();

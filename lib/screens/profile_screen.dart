@@ -5,6 +5,7 @@ import 'package:instagram_flutter/config/colors.dart';
 import 'package:instagram_flutter/config/utils.dart';
 import 'package:instagram_flutter/resources/auth_method.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
+import 'package:instagram_flutter/screens/TabView.dart';
 import 'package:instagram_flutter/screens/confirm_delete_user.dart';
 import 'package:instagram_flutter/screens/edit_profile_screen.dart';
 import 'package:instagram_flutter/screens/userPosts.dart';
@@ -182,8 +183,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 40,
                               ),
                               buildStatColumn(postLen, 'Posts'),
-                              buildStatColumn(followers, 'Followers'),
-                              buildStatColumn(following, 'Following')
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => TabView(
+                                        isFollowers: true,
+                                        userData: userData,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: buildStatColumn(followers, 'Followers'),
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => TabView(
+                                          isFollowers: false,
+                                          userData: userData,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child:
+                                      buildStatColumn(following, 'Following'))
                             ],
                           ),
                         )
