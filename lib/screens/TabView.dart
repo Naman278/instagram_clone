@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/config/colors.dart';
-import 'package:instagram_flutter/models/userModel.dart';
-import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/followers_screen.dart';
 import 'package:instagram_flutter/screens/following_screen.dart';
-import 'package:provider/provider.dart';
 
 class TabView extends StatefulWidget {
   final bool isFollowers;
@@ -23,7 +20,6 @@ class _TabViewState extends State<TabView> {
   @override
   Widget build(BuildContext context) {
     int currentIndex = widget.isFollowers ? 0 : 1;
-    UserModel user = Provider.of<UserProvider>(context).getUser;
     final List<Widget> _tabs = [
       Followers(
         userData: widget.userData,

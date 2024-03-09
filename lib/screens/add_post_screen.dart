@@ -187,7 +187,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       'Upload Image',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 19,
                       ),
                     ),
                   ],

@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/models/userModel.dart';
-import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/widgets/follower_card.dart';
-import 'package:provider/provider.dart';
 
 class Followers extends StatefulWidget {
   final userData;
@@ -19,7 +16,6 @@ class Followers extends StatefulWidget {
 class _FollowersState extends State<Followers> {
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserProvider>(context).getUser;
     List followers = widget.userData['followers'];
 
     return Scaffold(

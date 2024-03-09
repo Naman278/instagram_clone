@@ -122,12 +122,29 @@ class _LoginScreenState extends State<SignupScreen> {
                   //circular widget to show Profile Pic
                   Stack(
                     children: [
-                      CircleAvatar(
-                        radius: 75,
-                        backgroundColor: secondaryColor,
-                        backgroundImage: AssetImage('assets/default_user.png'),
-                        // MemoryImage(_image!),
-                      ),
+                      (_image != null)
+                          ? CircleAvatar(
+                              radius: 75,
+                              backgroundColor: secondaryColor,
+                              backgroundImage:
+                                  // (_image != null)
+                                  //     ?
+                                  //     // AssetImage('')
+                                  //     MemoryImage(_image!)
+                                  //     : AssetImage('assets/default_user.png'),
+                                  MemoryImage(_image!),
+                            )
+                          : const CircleAvatar(
+                              radius: 75,
+                              backgroundColor: secondaryColor,
+                              backgroundImage:
+                                  AssetImage('assets/default_user.png'),
+                              // (_image != null)
+                              //     ?
+                              //     // AssetImage('')
+                              //     MemoryImage(_image!)
+                              // MemoryImage(_image!),
+                            ),
                       Positioned(
                         bottom: -15,
                         left: 100,

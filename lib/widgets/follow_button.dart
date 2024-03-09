@@ -23,6 +23,7 @@ class FollowButton extends StatefulWidget {
 class _FollowButtonState extends State<FollowButton> {
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.only(
         top: 10,
@@ -45,7 +46,7 @@ class _FollowButtonState extends State<FollowButton> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          width: widget.isOwner ? 280 : 163,
+          width: widget.isOwner ? screenWidth * 0.75 : screenWidth * .38,
           height: 35,
         ),
       ),
